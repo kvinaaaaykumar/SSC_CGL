@@ -3,13 +3,42 @@
 <head>
   <meta charset="UTF-8">
   <title>Mock Test - 1</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body {
       font-family: Arial, sans-serif;
+      background: #f5f5f5;
       padding: 20px;
+      margin: 0;
+    }
+    .language-switch {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+    }
+    .language-switch button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 5px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      transition: background-color 0.3s;
+    }
+    .language-switch button:hover {
+      background-color: #0056b3;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
     }
     .question {
-      margin-bottom: 20px;
+      margin-bottom: 30px;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     }
     .question h3 {
       margin-bottom: 10px;
@@ -17,32 +46,55 @@
     .correct-answer {
       color: green;
       font-weight: bold;
+      margin-top: 10px;
     }
     .wrong-answer {
       color: red;
       font-weight: bold;
+      margin-top: 10px;
     }
     .result {
       font-size: 20px;
       margin-top: 30px;
       font-weight: bold;
+      text-align: center;
     }
     .submit-btn {
-      padding: 10px 20px;
-      font-size: 16px;
+      display: block;
+      margin: 0 auto;
+      padding: 10px 30px;
+      font-size: 18px;
+      border: none;
+      background: #007bff;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .submit-btn:hover {
+      background: #0056b3;
+    }
+    @media (max-width: 600px) {
+      .question h3 {
+        font-size: 16px;
+      }
+      .submit-btn {
+        width: 100%;
+      }
     }
   </style>
 </head>
 <body>
 
-  <h1>Mock Test - 1</h1>
+  <div class="language-switch">
+    <button onclick="toggleLanguage()">हिंदी / English</button>
+  </div>
+
+  <h1 id="main-heading">Mock Test - 1</h1>
+
   <form id="mockTestForm">
-
-    <!-- Questions -->
     <div id="questions"></div>
-
     <button type="button" class="submit-btn" onclick="calculateScore()">Submit</button>
-
     <div class="result" id="result"></div>
   </form>
 
@@ -51,26 +103,47 @@
     const correctAnswer = "3"; // Hariprasad Chaurasia
     const marksForCorrect = 2;
     const marksForWrong = -0.5;
+    let isHindi = false;
 
     const questionsDiv = document.getElementById('questions');
 
-    // Generate 10 questions dynamically
-    for (let i = 1; i <= totalQuestions; i++) {
-      questionsDiv.innerHTML += `
-        <div class="question" id="question${i}">
-          <h3>Q${i}. Who among the following is the world renowned exponent of the bamboo flute?</h3>
-          <label><input type="radio" name="q${i}" value="1"> MS Subbulakshmi</label><br>
-          <label><input type="radio" name="q${i}" value="2"> Ravi Shankar</label><br>
-          <label><input type="radio" name="q${i}" value="3"> Hariprasad Chaurasia</label><br>
-          <label><input type="radio" name="q${i}" value="4"> Bismillah Khan</label>
-          <div class="answer-feedback" id="feedback${i}"></div>
-        </div>
-      `;
+    const englishQuestion = "Who among the following is the world renowned exponent of the bamboo flute?";
+    const hindiQuestion = "निम्नलिखित में से कौन बांसुरी के विश्व प्रसिद्ध वादक हैं?";
+
+    const options = [
+      { en: "MS Subbulakshmi", hi: "एमएस सुब्बुलक्ष्मी" },
+      { en: "Ravi Shankar", hi: "रवि शंकर" },
+      { en: "Hariprasad Chaurasia", hi: "हरिप्रसाद चौरसिया" },
+      { en: "Bismillah Khan", hi: "बिस्मिल्ला खान" },
+    ];
+
+    function renderQuestions() {
+      questionsDiv.innerHTML = "";
+      for (let i = 1; i <= totalQuestions; i++) {
+        let questionHTML = `
+          <div class="question" id="question${i}">
+            <h3>Q${i}. ${isHindi ? hindiQuestion : englishQuestion}</h3>`;
+        options.forEach((opt, idx) => {
+          questionHTML += `
+            <label>
+              <input type="radio" name="q${i}" value="${idx + 1}"> ${isHindi ? opt.hi : opt.en}
+            </label><br>`;
+        });
+        questionHTML += `<div class="answer-feedback" id="feedback${i}"></div></div>`;
+        questionsDiv.innerHTML += questionHTML;
+      }
+    }
+
+    function toggleLanguage() {
+      isHindi = !isHindi;
+      document.getElementById("main-heading").innerText = isHindi
+        ? "मॉक टेस्ट - 1"
+        : "Mock Test - 1";
+      renderQuestions();
     }
 
     function calculateScore() {
       let score = 0;
-
       for (let i = 1; i <= totalQuestions; i++) {
         const options = document.getElementsByName(`q${i}`);
         const feedback = document.getElementById(`feedback${i}`);
@@ -85,17 +158,22 @@
 
         if (selected === correctAnswer) {
           score += marksForCorrect;
-          feedback.innerHTML = `<div class="correct-answer">✔ Correct Answer</div>`;
+          feedback.innerHTML = `<div class="correct-answer">✔ ${isHindi ? "सही उत्तर" : "Correct Answer"}</div>`;
         } else if (selected === null) {
-          feedback.innerHTML = `<div class="wrong-answer">⚠ Not Attempted. Correct Answer: Hariprasad Chaurasia</div>`;
+          feedback.innerHTML = `<div class="wrong-answer">⚠ ${isHindi ? "प्रयास नहीं किया गया। सही उत्तर: हरिप्रसाद चौरसिया" : "Not Attempted. Correct Answer: Hariprasad Chaurasia"}</div>`;
         } else {
           score += marksForWrong;
-          feedback.innerHTML = `<div class="wrong-answer">✘ Wrong Answer. Correct Answer: Hariprasad Chaurasia</div>`;
+          feedback.innerHTML = `<div class="wrong-answer">✘ ${isHindi ? "गलत उत्तर। सही उत्तर: हरिप्रसाद चौरसिया" : "Wrong Answer. Correct Answer: Hariprasad Chaurasia"}</div>`;
         }
       }
 
-      document.getElementById("result").innerText = `Your total score is: ${score}`;
+      document.getElementById("result").innerText = isHindi
+        ? `आपका कुल स्कोर है: ${score}`
+        : `Your total score is: ${score}`;
     }
+
+    // Initial load
+    renderQuestions();
   </script>
 
 </body>

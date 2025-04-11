@@ -3,56 +3,133 @@
 <head>
   <meta charset="UTF-8">
   <title>Mock Test Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: Arial, sans-serif;
       background: #f5f5f5;
       text-align: center;
-      padding: 50px;
+      padding: 30px 15px;
+      margin: 0;
     }
+
     h1 {
-      margin-bottom: 40px;
+      margin-bottom: 30px;
       color: #333;
+      font-size: 24px;
     }
+
     .test-list {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 15px;
+      max-width: 800px;
+      margin: 0 auto;
     }
+
     .test-item {
       background: white;
       border: 1px solid #ccc;
       border-radius: 10px;
-      padding: 20px 40px;
+      padding: 15px;
       text-decoration: none;
       color: #333;
-      font-size: 20px;
+      font-size: 18px;
       transition: 0.3s;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 60px;
     }
+
     .test-item:hover {
       background: #007bff;
       color: white;
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
+
+    .language-switch {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+    }
+
+    .language-switch button {
+      padding: 8px 16px;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 5px;
+      border: none;
+      background-color: #007bff;
+      color: white;
+      transition: background-color 0.3s;
+    }
+
+    .language-switch button:hover {
+      background-color: #0056b3;
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 20px;
+      }
+
+      .language-switch {
+        position: static;
+        margin-bottom: 20px;
+      }
+
+      .language-switch button {
+        font-size: 13px;
+        padding: 6px 12px;
+      }
+
+      .test-item {
+        font-size: 16px;
+        padding: 12px;
+        min-height: 50px;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <h1>Welcome to the Mock Test SSC CGL</h1>
-  <div class="test-list">
-    <a href="test1.html" class="test-item">Test 1</a>
-    <a href="test2.html" class="test-item">Test 2</a>
-    <a href="test3.html" class="test-item">Test 3</a>
-    <a href="test4.html" class="test-item">Test 4</a>
-    <a href="test5.html" class="test-item">Test 5</a>
-    <a href="test6.html" class="test-item">Test 6</a>
-    <a href="test7.html" class="test-item">Test 7</a>
-    <a href="test8.html" class="test-item">Test 8</a>
-    <a href="test9.html" class="test-item">Test 9</a>
-    <a href="test10.html" class="test-item">Test 10</a>
+  <div class="language-switch">
+    <button onclick="toggleLanguage()">हिंदी / English</button>
   </div>
+
+  <h1 id="main-heading">Welcome to the Mock Test SSC CGL</h1>
+  <div class="test-list">
+    <a href="test1.html" class="test-item" data-en="Test 1" data-hi="टेस्ट 1">Test 1</a>
+    <a href="test2.html" class="test-item" data-en="Test 2" data-hi="टेस्ट 2">Test 2</a>
+    <a href="test3.html" class="test-item" data-en="Test 3" data-hi="टेस्ट 3">Test 3</a>
+    <a href="test4.html" class="test-item" data-en="Test 4" data-hi="टेस्ट 4">Test 4</a>
+    <a href="test5.html" class="test-item" data-en="Test 5" data-hi="टेस्ट 5">Test 5</a>
+    <a href="test6.html" class="test-item" data-en="Test 6" data-hi="टेस्ट 6">Test 6</a>
+    <a href="test7.html" class="test-item" data-en="Test 7" data-hi="टेस्ट 7">Test 7</a>
+    <a href="test8.html" class="test-item" data-en="Test 8" data-hi="टेस्ट 8">Test 8</a>
+    <a href="test9.html" class="test-item" data-en="Test 9" data-hi="टेस्ट 9">Test 9</a>
+    <a href="test10.html" class="test-item" data-en="Test 10" data-hi="टेस्ट 10">Test 10</a>
+  </div>
+
+  <script>
+    let isHindi = false;
+    function toggleLanguage() {
+      isHindi = !isHindi;
+      document.getElementById("main-heading").innerText = isHindi
+        ? "SSC CGL मॉक टेस्ट में आपका स्वागत है"
+        : "Welcome to the Mock Test SSC CGL";
+
+      document.querySelectorAll(".test-item").forEach(item => {
+        item.innerText = isHindi ? item.dataset.hi : item.dataset.en;
+      });
+    }
+  </script>
 
 </body>
 </html>

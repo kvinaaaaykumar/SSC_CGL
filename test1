@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Mock Test - 1</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .question {
+      margin-bottom: 20px;
+    }
+    .question h3 {
+      margin-bottom: 10px;
+    }
+    .correct-answer {
+      color: green;
+      font-weight: bold;
+    }
+    .wrong-answer {
+      color: red;
+      font-weight: bold;
+    }
+    .result {
+      font-size: 20px;
+      margin-top: 30px;
+      font-weight: bold;
+    }
+    .submit-btn {
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Mock Test - 1</h1>
+  <form id="mockTestForm">
+
+    <!-- Questions -->
+    <div id="questions"></div>
+
+    <button type="button" class="submit-btn" onclick="calculateScore()">Submit</button>
+
+    <div class="result" id="result"></div>
+  </form>
+
+  <script>
+    const totalQuestions = 10;
+    const correctAnswer = "3"; // Hariprasad Chaurasia
+    const marksForCorrect = 2;
+    const marksForWrong = -0.5;
+
+    const questionsDiv = document.getElementById('questions');
+
+    // Generate 10 questions dynamically
+    for (let i = 1; i <= totalQuestions; i++) {
+      questionsDiv.innerHTML += `
+        <div class="question" id="question${i}">
+          <h3>Q${i}. Who among the following is the world renowned exponent of the bamboo flute?</h3>
+          <label><input type="radio" name="q${i}" value="1"> MS Subbulakshmi</label><br>
+          <label><input type="radio" name="q${i}" value="2"> Ravi Shankar</label><br>
+          <label><input type="radio" name="q${i}" value="3"> Hariprasad Chaurasia</label><br>
+          <label><input type="radio" name="q${i}" value="4"> Bismillah Khan</label>
+          <div class="answer-feedback" id="feedback${i}"></div>
+        </div>
+      `;
+    }
+
+    function calculateScore() {
+      let score = 0;
+
+      for (let i = 1; i <= totalQuestions; i++) {
+        const options = document.getElementsByName(`q${i}`);
+        const feedback = document.getElementById(`feedback${i}`);
+        let selected = null;
+
+        for (const option of options) {
+          if (option.checked) {
+            selected = option.value;
+            break;
+          }
+        }
+
+        if (selected === correctAnswer) {
+          score += marksForCorrect;
+          feedback.innerHTML = `<div class="correct-answer">✔ Correct Answer</div>`;
+        } else if (selected === null) {
+          feedback.innerHTML = `<div class="wrong-answer">⚠ Not Attempted. Correct Answer: Hariprasad Chaurasia</div>`;
+        } else {
+          score += marksForWrong;
+          feedback.innerHTML = `<div class="wrong-answer">✘ Wrong Answer. Correct Answer: Hariprasad Chaurasia</div>`;
+        }
+      }
+
+      document.getElementById("result").innerText = `Your total score is: ${score}`;
+    }
+  </script>
+
+</body>
+</html>
